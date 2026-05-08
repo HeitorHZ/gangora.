@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(#0f172a, #1e2937);
+            overflow: hidden;
+        }
+
+        .scene {
+            position: relative;
+            width: 700px;
+            height: 400px;
+        }
+
+        /* Gangorra centralizada */
+        .seesaw {
+            position: absolute;
+            left: 50%;
+            top: 190px;
+            width: 580px;
+            height: 11px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+            transform-origin: center;
+            transform: translateX(-50%);
+            z-index: 2;
+        }
+
+        /* Hexágono Branco - sem símbolo interno */
+        .hexagon {
+            position: absolute;
+            width: 46px;
+            height: 46px;
+            top: -43px;
+            left: 60px;
+            background: #f8fafc;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.55);
+            border: 3px solid #e2e8f0;
+            border-radius: 8px;
+            z-index: 3;
+            clip-path: polygon(50% 4%, 90% 28%, 90% 72%, 50% 96%, 10% 72%, 10% 28%);
+        }
+
+        h1 {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #e2e8f0;
+            font-size: 2.5rem;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1></h1>
+    
+    <div class="scene">
+        <div class="seesaw" id="seesaw">
+            <div class="hexagon" id="hex"></div>
+        </div>
+    </div>
+
+    <script>
+        const seesaw = document.getElementById('seesaw');
+        const hex = document.getElementById('hex');
+
+        let time = 0;
+        let hexRotation = 0;
+
+        function animate() {
+            time += 0.022;
+
+            const angle = Math.sin(time) * 22;
+            seesaw.style.transform = `translateX(-50%) rotate(${angle}deg)`;
+
+            // Hexágono sempre contra a inclinação
+            const hexPosition = 245 - Math.sin(time) * 210;
+            hex.style.left = `${hexPosition}px`;
+
+            const verticalOffset = Math.abs(Math.sin(time * 2)) * 6;
+            hex.style.top = `${-43 - verticalOffset}px`;
+
+            const movementSpeed = Math.cos(time) * 9;
+            hexRotation -= movementSpeed;
+            hex.style.transform = `rotate(${hexRotation}deg)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
